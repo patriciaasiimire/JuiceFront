@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ntuma — Order from your neighbourhood shop</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="logo">🛍️</div>
+    <div>
+      <h1>Ntuma</h1>
+      <p class="tagline">Need something from the shop? We'll bring it to you.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <form id="order-form" class="card">
+      <label for="text" class="big-label">Describe everything you'd like today</label>
+      <textarea id="text" name="text" rows="7" placeholder="2 Mango Juice (500 each)
+1 Bread
+Blue Band worth 2,000
+Sugar worth 5,000
+I have 15,000 cash"></textarea>
+      <p class="hint">Just write it like you'd tell the shop owner.</p>
+
+      <label for="phone">Your phone number</label>
+      <input id="phone" name="phone" type="tel" placeholder="07xx xxx xxx" required />
+
+      <label for="location">Where should we deliver?</label>
+      <input id="location" name="location" type="text" placeholder="House opposite the mosque, Nansana" required />
+
+      <button type="submit" id="submit-btn" class="btn-primary">Send Order</button>
+      <div id="message" class="message" role="status"></div>
+    </form>
+
+    <p class="links">
+      <a href="/orders.html">See all orders</a> ·
+      <a href="/operator.html">Operator view</a>
+    </p>
+  </main>
+
+  <footer class="site-footer">Built simply for Nansana shops.</footer>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
