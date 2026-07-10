@@ -1,0 +1,18 @@
+{% extends "_base.html" %}
+{% block title %}Staff login — Juice{% endblock %}
+{% block body %}
+<main class="wrap login">
+  <h1>Staff login</h1>
+  <form class="form" method="post">
+    {% if locked %}
+      <div class="flash">Too many attempts. Try again in {{ (locked // 60) + 1 }} minute(s).</div>
+    {% else %}
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autofocus required>
+      <div class="hint">{{ remaining }} attempt(s) remaining before lockout.</div>
+      {% if error %}<div class="error">{{ error }}</div>{% endif %}
+      <button type="submit" class="btn btn-block" style="margin-top:16px;">Log in</button>
+    {% endif %}
+  </form>
+</main>
+{% endblock %}

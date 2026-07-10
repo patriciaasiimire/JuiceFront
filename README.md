@@ -1,34 +1,51 @@
-# Ntuma — Neighbourhood Shop Delivery
+# JuiceFront — Fresh Juice Delivered
 
-A tiny, friendly delivery app for a small shop in Nansana, Uganda.
-Customers just write what they want in one text box. That's it.
+A tiny, beautiful Flask app for ordering fresh juice from local vendors in Nansana, Uganda.
+We are the delivery service — vendors keep their prices, we add a small service fee.
 
 ## Run it
 
 ```bash
 pip install -r requirements.txt
+export STAFF_PASSWORD="pick-a-strong-password"
+export SESSION_SECRET="any-long-random-string"
 python app.py
 ```
 
 Then open http://127.0.0.1:5000
 
+## What's inside
+
+- `app.py` — the whole Flask app (single file, commented)
+- `templates/` — HTML pages
+- `static/style.css` — colorful, mobile-first styles
+- `juice.db` — SQLite database, auto-created on first run
+
 ## Pages
 
-- `/` — the customer order page
-- `/orders.html` — every order that has come in (for testing)
-- `/operator.html` — the shop operator's dashboard (update order status)
+**Public**
+- `/` — Homepage with juice vendor cards
+- `/vendor/<id>` — Vendor detail + Order Now button
+- `/order/<id>` — Order form (phone, location, note)
+- `/success/<order_id>` — Order confirmation
 
-## Files
+**Staff only (password protected)**
+- `/login` — Enter staff password (3 wrong tries = 15 min lockout per IP)
+- `/orders` — All orders
+- `/operator` — Active orders dashboard, update status
+- `/logout`
 
-```
-ntuma-shop/
-├── app.py             # Flask backend + SQLite (all in one file)
-├── requirements.txt
-├── orders.db          # auto-created on first run
-├── templates/         # HTML pages
-├── static/css/        # styles
-├── static/js/         # small vanilla JS helpers
-└── images/            # place a logo/photo here if you like
-```
+## Configuration
 
-Everything is deliberately simple so Patricia (and any beginner) can read it end-to-end.
+- `STAFF_PASSWORD` — required for staff pages. Missing = staff pages disabled.
+- `SESSION_SECRET` — set to a long random string in production.
+- Service fee is `SERVICE_FEE = 300` UGX in `app.py` — edit to taste.
+- Add/edit vendors in the `VENDORS` list in `app.py`.
+
+## Three-click order flow
+
+1. Click a juice card on the homepage
+2. Click "Order Now"
+3. Fill phone + location → click "Place Order"
+
+Done.

@@ -1,55 +1,25 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>All orders — Ntuma</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
-</head>
-<body>
-  <header class="site-header">
-    <div class="logo">📋</div>
-    <div>
-      <h1>All Orders</h1>
-      <p class="tagline">Everything customers have sent in.</p>
-    </div>
-  </header>
-
-  <main class="container">
-    <div id="orders-list" class="orders-list">Loading…</div>
-    <p class="links"><a href="/">← Back to order page</a></p>
-  </main>
-
-  <footer class="site-footer">Built simply for Nansana shops.</footer>
-
-  <script>
-    // Fetch every order and show them as friendly cards.
-    async function load() {
-      const list = document.getElementById("orders-list");
-      try {
-        const res = await fetch("/api/orders");
-        const orders = await res.json();
-        if (!orders.length) { list.innerHTML = "<p>No orders yet.</p>"; return; }
-        list.innerHTML = orders.map(o => `
-          <article class="order-card">
-            <header>
-              <span class="order-id">#${o.id}</span>
-              <span class="status status-${o.status.toLowerCase()}">${o.status}</span>
-            </header>
-            <pre class="order-text">${escapeHtml(o.text)}</pre>
-            <footer>
-              <div>📞 ${escapeHtml(o.phone)}</div>
-              <div>📍 ${escapeHtml(o.location)}</div>
-              <div class="ts">${o.created_at}</div>
-            </footer>
-          </article>
-        `).join("");
-      } catch (e) {
-        list.textContent = "Could not load orders.";
-      }
-    }
-    function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-    load();
-  </script>
-</body>
-</html>
+{% extends "_base.html" %}
+{% block title %}All orders — Juice{% endblock %}
+{% block body %}
+<main class="wrap">
+  <h1>All orders</h1>
+  {% if orders %}
+  <table class="table">
+    <tr><th>#</th><th>Vendor</th><th>Juice</th><th>Phone</th><th>Location</th><th>Total</th><th>Status</th></tr>
+    {% for o in orders %}
+    <tr>
+      <td>{{ o['id'] }}</td>
+      <td>{{ o['vendor_name'] }}</td>
+      <td>{{ o['juice'] }}</td>
+      <td>{{ o['phone'] }}</td>
+      <td>{{ o['location'] }}</td>
+      <td>UGX {{ '{:,}'.format(o['total']) }}</td>
+      <td><span class="badge {{ o['status'] }}">{{ o['status'] }}</span></td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+    <p style="color:var(--muted);">No orders yet.</p>
+  {% endif %}
+</main>
+{% endblock %}

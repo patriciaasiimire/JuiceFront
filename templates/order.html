@@ -1,0 +1,27 @@
+{% extends "_base.html" %}
+{% block title %}Order — {{ v.juice }}{% endblock %}
+{% block body %}
+<main class="wrap" style="max-width:560px;">
+  <h1>Order {{ v.juice }}</h1>
+  <p style="color:var(--muted);">From {{ v.name }}</p>
+  {% with messages = get_flashed_messages() %}
+    {% for m in messages %}<div class="flash">{{ m }}</div>{% endfor %}
+  {% endwith %}
+  <form class="form" method="post">
+    <label for="phone">Your phone number</label>
+    <input id="phone" name="phone" type="tel" placeholder="07XX XXX XXX" required>
+    <label for="location">Delivery location</label>
+    <input id="location" name="location" placeholder="e.g. Nansana, near Ganda market" required>
+    <label for="note">Note (optional)</label>
+    <textarea id="note" name="note" rows="2" placeholder="Anything we should know?"></textarea>
+
+    <div class="pricebox" style="margin-top:20px;">
+      <div class="line"><span>Juice</span><span>UGX {{ '{:,}'.format(v.price) }}</span></div>
+      <div class="line"><span>Delivery fee</span><span>UGX {{ '{:,}'.format(service_fee) }}</span></div>
+      <div class="line total"><span>Total</span><span>UGX {{ '{:,}'.format(v.price + service_fee) }}</span></div>
+    </div>
+
+    <button type="submit" class="btn btn-block" style="margin-top:16px;">Place Order</button>
+  </form>
+</main>
+{% endblock %}

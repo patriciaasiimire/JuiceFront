@@ -1,70 +1,29 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Operator — Ntuma</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
-</head>
-<body>
-  <header class="site-header">
-    <div class="logo">🧑‍🍳</div>
-    <div>
-      <h1>Operator Dashboard</h1>
-      <p class="tagline">Move each order forward as you work.</p>
+{% extends "_base.html" %}
+{% block title %}Operator — Juice{% endblock %}
+{% block body %}
+<main class="wrap">
+  <h1>Active orders</h1>
+  {% if orders %}
+    {% for o in orders %}
+    <div class="op-card">
+      <h3>#{{ o['id'] }} — {{ o['juice'] }} <span class="badge {{ o['status'] }}">{{ o['status'] }}</span></h3>
+      <div class="meta">{{ o['vendor_name'] }} · {{ o['phone'] }} · {{ o['location'] }}</div>
+      {% if o['note'] %}<div class="meta">Note: {{ o['note'] }}</div>{% endif %}
+      <div class="meta"><strong>UGX {{ '{:,}'.format(o['total']) }}</strong></div>
+      <div class="op-actions">
+        {% for s in ['New', 'Preparing', 'Delivering', 'Delivered'] %}
+          {% if s != o['status'] %}
+          <form method="post" action="{{ url_for('update_status', oid=o['id']) }}">
+            <input type="hidden" name="status" value="{{ s }}">
+            <button class="btn btn-ghost" type="submit">Mark {{ s }}</button>
+          </form>
+          {% endif %}
+        {% endfor %}
+      </div>
     </div>
-  </header>
-
-  <main class="container">
-    <div id="orders-list" class="orders-list">Loading…</div>
-    <p class="links"><a href="/">← Back to order page</a></p>
-  </main>
-
-  <footer class="site-footer">Built simply for Nansana shops.</footer>
-
-  <script>
-    const STATUSES = ["New", "Buying", "Walking", "Delivered"];
-
-    async function load() {
-      const list = document.getElementById("orders-list");
-      const res = await fetch("/api/orders");
-      const orders = await res.json();
-      if (!orders.length) { list.innerHTML = "<p>No orders yet.</p>"; return; }
-
-      list.innerHTML = orders.map(o => `
-        <article class="order-card">
-          <header>
-            <span class="order-id">#${o.id}</span>
-            <span class="status status-${o.status.toLowerCase()}">${o.status}</span>
-          </header>
-          <pre class="order-text">${escapeHtml(o.text)}</pre>
-          <footer>
-            <div>📞 ${escapeHtml(o.phone)}</div>
-            <div>📍 ${escapeHtml(o.location)}</div>
-            <div class="ts">${o.created_at}</div>
-          </footer>
-          <div class="status-buttons">
-            ${STATUSES.map(s => `
-              <button data-id="${o.id}" data-status="${s}"
-                class="btn-status ${o.status === s ? 'active' : ''}">${s}</button>
-            `).join("")}
-          </div>
-        </article>
-      `).join("");
-
-      list.querySelectorAll(".btn-status").forEach(btn => {
-        btn.addEventListener("click", async () => {
-          await fetch(`/api/orders/${btn.dataset.id}/status`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({status: btn.dataset.status}),
-          });
-          load();
-        });
-      });
-    }
-    function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-    load();
-  </script>
-</body>
-</html>
+    {% endfor %}
+  {% else %}
+    <p style="color:var(--muted);">Nothing to do — all caught up!</p>
+  {% endif %}
+</main>
+{% endblock %}

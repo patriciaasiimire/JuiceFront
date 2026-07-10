@@ -1,0 +1,18 @@
+{% extends "_base.html" %}
+{% block title %}Order placed — Juice{% endblock %}
+{% block body %}
+<main class="wrap" style="max-width:520px;">
+  <div class="success">
+    <div class="check">✓</div>
+    <h1>Order placed!</h1>
+    <p style="color:var(--muted);">We'll call {{ o['phone'] }} shortly to confirm.</p>
+    <div class="pricebox" style="text-align:left;margin-top:20px;">
+      <div class="line"><span>Order #</span><span>{{ o['id'] }}</span></div>
+      <div class="line"><span>{{ o['juice'] }}</span><span>{{ o['vendor_name'] }}</span></div>
+      <div class="line"><span>Delivery to</span><span>{{ o['location'] }}</span></div>
+      <div class="line total"><span>Total</span><span>UGX {{ '{:,}'.format(o['total']) }}</span></div>
+    </div>
+    <a href="{{ url_for('home') }}" class="btn btn-ghost" style="margin-top:20px;">Back to juices</a>
+  </div>
+</main>
+{% endblock %}

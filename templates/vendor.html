@@ -1,0 +1,20 @@
+{% extends "_base.html" %}
+{% block title %}{{ v.name }} — Juice{% endblock %}
+{% block body %}
+<main class="wrap">
+  <div class="detail">
+    <img src="{{ v.photo }}" alt="{{ v.juice }}">
+    <div>
+      <h1>{{ v.juice }}</h1>
+      <div class="juice" style="color:var(--muted);margin-bottom:8px;">by {{ v.name }}</div>
+      <p class="desc">{{ v.description }}</p>
+      <div class="pricebox">
+        <div class="line"><span>Juice price</span><span>UGX {{ '{:,}'.format(v.price) }}</span></div>
+        <div class="line"><span>Delivery fee</span><span>UGX {{ '{:,}'.format(service_fee) }}</span></div>
+        <div class="line total"><span>Total</span><span>UGX {{ '{:,}'.format(v.price + service_fee) }}</span></div>
+      </div>
+      <a class="btn btn-block" href="{{ url_for('order', vid=v.id) }}">Order Now</a>
+    </div>
+  </div>
+</main>
+{% endblock %}
