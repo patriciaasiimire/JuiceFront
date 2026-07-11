@@ -1,26 +1,24 @@
 {% extends "_base.html" %}
-{% block body %}
-
-<!-- <section class="hero">
-  <h1>Fresh Juice Delivered</h1>
-  <p>Order in seconds from your favorite local vendors in Nansana.</p>
-</section> -->
-
-<main class="wrap">
-  <div class="grid">
-    {% for v in vendors %}
-      <a class="card" href="{{ url_for('vendor_detail', vid=v.id) }}">
-        <img src="{{ v.photo }}" alt="{{ v.juice }}">
-        <div class="card-body">
-          <h3>{{ v.name }}</h3>
-          <div class="juice">{{ v.juice }}</div>
-          <div class="row">
-            <span class="price">UGX {{ '{:,}'.format(v.price) }}</span>
-            <span class="btn" style="padding:8px 16px;font-size:14px;">Order</span>
-          </div>
-        </div>
-      </a>
-    {% endfor %}
-  </div>
-</main>
+{% block content %}
+<div class="hero">
+  <h1>Fresh Juice, Delivered 🍹</h1>
+</div>
+<h2 style="margin-top:28px">Sellers Listings</h2>
+<div class="grid">
+  {% for c in cards %}
+    {% set v = c.v %}{% set j = c.j %}
+    <a class="card" href="{{ url_for('vendor_detail', vid=v['id']) }}" style="color:inherit">
+      <div class="photo">
+        {% if v['photo'] %}
+          <img src="{{ url_for('static', filename='uploads/vendors/' ~ v['photo']) }}" alt="{{ v['name'] }}">
+        {% else %}🥤{% endif %}
+      </div>
+      <div class="body">
+        <h3>{{ v['name'] }}</h3>
+        <div class="muted">{{ v['description'][:80] }}</div>
+        {% if j %}<div class="price">{{ j['name'] }} · {{ '{:,}'.format(j['price']) }} UGX</div>{% endif %}
+      </div>
+    </a>
+  {% endfor %}
+</div>
 {% endblock %}

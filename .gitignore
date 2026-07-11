@@ -1,33 +1,7 @@
-# Python
+venv/
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-ENV/
-
-# Database
-orders.db
-*.db
-
-# Dependencies
-requirements.txt
-
-# Logs
-*.log
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Editor
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Build / temp
-dist/
-build/
+.env
+juicefront.db
+static/uploads/vendors/*
+!static/uploads/vendors/.gitkeep

@@ -1,20 +1,24 @@
 {% extends "_base.html" %}
-{% block title %}{{ v.name }} — Juice{% endblock %}
-{% block body %}
-<main class="wrap">
-  <div class="detail">
-    <img src="{{ v.photo }}" alt="{{ v.juice }}">
-    <div>
-      <h1>{{ v.juice }}</h1>
-      <div class="juice" style="color:var(--muted);margin-bottom:8px;">by {{ v.name }}</div>
-      <p class="desc">{{ v.description }}</p>
-      <div class="pricebox">
-        <div class="line"><span>Juice price</span><span>UGX {{ '{:,}'.format(v.price) }}</span></div>
-        <div class="line"><span>Delivery fee</span><span>UGX {{ '{:,}'.format(service_fee) }}</span></div>
-        <div class="line total"><span>Total</span><span>UGX {{ '{:,}'.format(v.price + service_fee) }}</span></div>
-      </div>
-      <a class="btn btn-block" href="{{ url_for('order', vid=v.id) }}">Order Now</a>
-    </div>
+{% block title %}{{ vendor['name'] }} — JuiceFront{% endblock %}
+{% block content %}
+<a href="{{ url_for('index') }}" class="back">← All vendors</a>
+<section class="vendor-header">
+  <div class="photo big">{{ vendor['photo'] or '🍹' }}</div>
+  <div>
+    <h1>{{ vendor['name'] }}</h1>
+    <p>{{ vendor['description'] }}</p>
   </div>
-</main>
+</section>
+<h2 class="section-title">Menu</h2>
+<div class="grid">
+  {% for j in juices %}
+    <div class="card juice-card">
+      <h3>{{ j['name'] }}</h3>
+      <p class="price">UGX {{ '{:,}'.format(j['price']) }} <small>{{ j['unit'] }}</small></p>
+      <a class="btn" href="{{ url_for('order', jid=j['id']) }}">Order</a>
+    </div>
+  {% else %}
+    <p>No juices available right now.</p>
+  {% endfor %}
+</div>
 {% endblock %}

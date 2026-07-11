@@ -1,51 +1,79 @@
-# JuiceFront — Fresh Juice Delivered
+# JuiceFront 🍹
 
-A tiny, beautiful Flask app for ordering fresh juice from local vendors in Nansana, Uganda.
-We are the delivery service — vendors keep their prices, we add a small service fee.
+**Fresh Juice Delivered** — An Airbnb-style marketplace connecting customers in Nansana, Uganda with local juice vendors.
 
-## Run it
+- We handle delivery and charge a small service fee (default 300 UGX).
+- Vendors keep their own prices.
+- Simple, mobile-first, three-click ordering.
+
+## Tech Stack
+- Python 3.10+ · Flask · SQLite
+- Vanilla HTML / CSS / JavaScript
+
+## Project Structure
+```
+juicefront/
+├── app.py
+├── requirements.txt
+├── Procfile
+├── .env.example
+├── README.md
+├── static/
+│   ├── css/style.css
+│   ├── js/script.js
+│   └── uploads/vendors/
+└── templates/
+    ├── _base.html
+    ├── index.html
+    ├── vendor_detail.html
+    ├── order_form.html
+    ├── success.html
+    ├── login.html
+    ├── vendor_dashboard.html
+    ├── operator_dashboard.html
+    ├── orders.html
+    └── error.html
+```
+
+## Local Setup
 
 ```bash
+python -m venv venv
+source venv/bin/activate         # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-export STAFF_PASSWORD="pick-a-strong-password"
-export SESSION_SECRET="any-long-random-string"
+cp .env.example .env             # then edit passwords
 python app.py
 ```
 
-Then open http://127.0.0.1:5000
+Open <http://127.0.0.1:5000>.
 
-## What's inside
+The database (`juicefront.db`) and default users are auto-created on first run.
 
-- `app.py` — the whole Flask app (single file, commented)
-- `templates/` — HTML pages
-- `static/style.css` — colorful, mobile-first styles
-- `juice.db` — SQLite database, auto-created on first run
+## Default Accounts (change in production!)
+| Role      | Username           | Password (from .env)         |
+| --------- | ------------------ | ---------------------------- |
+| Operator  | `operator`         | `OPERATOR_PASSWORD`          |
+| Vendors   | `vendor1`…`vendor6`| `VENDOR_DEFAULT_PASSWORD`    |
 
-## Pages
+## Roles (RBAC)
+- **Public / Customer** — Browse vendors, order juice. No login.
+- **Vendor** — Login → manage profile (name, description, photo upload), manage juices, view own orders.
+- **Operator (Admin)** — Full access: all orders, update statuses, daily revenue summary.
 
-**Public**
-- `/` — Homepage with juice vendor cards
-- `/vendor/<id>` — Vendor detail + Order Now button
-- `/order/<id>` — Order form (phone, location, note)
-- `/success/<order_id>` — Order confirmation
+## Security
+- Passwords hashed with Werkzeug.
+- Session-based auth, `SESSION_SECRET` from env.
+- 3-try IP lockout on `/login` (15 min).
+- File uploads: images only, 2 MB max.
+- Set `DEBUG=False` in production.
 
-**Staff only (password protected)**
-- `/login` — Enter staff password (3 wrong tries = 15 min lockout per IP)
-- `/orders` — All orders
-- `/operator` — Active orders dashboard, update status
-- `/logout`
+## Deploy to Render / Heroku
+1. Push to GitHub.
+2. Create a new Web Service on [Render](https://render.com).
+3. Build command: `pip install -r requirements.txt`
+4. Start command: `gunicorn app:app` (from `Procfile`).
+5. Set environment variables from `.env.example`.
+6. For persistent vendor uploads, attach a Render **Persistent Disk** mounted at `/opt/render/project/src/static/uploads/vendors`. For scale, switch storage to S3 / Cloud Storage and DB to Postgres.
 
-## Configuration
-
-- `STAFF_PASSWORD` — required for staff pages. Missing = staff pages disabled.
-- `SESSION_SECRET` — set to a long random string in production.
-- Service fee is `SERVICE_FEE = 300` UGX in `app.py` — edit to taste.
-- Add/edit vendors in the `VENDORS` list in `app.py`.
-
-## Three-click order flow
-
-1. Click a juice card on the homepage
-2. Click "Order Now"
-3. Fill phone + location → click "Place Order"
-
-Done.
+## License
+MIT — free to use, modify, and share.
