@@ -10,7 +10,7 @@
     <a class="card" href="{{ url_for('vendor_detail', vid=v['id']) }}" style="color:inherit">
       <div class="photo">
         {% if v['photo'] %}
-          <img src="{{ url_for('static', filename='uploads/vendors/' ~ v['photo']) }}" alt="{{ v['name'] }}">
+          <img src="{{ v['photo'] }}" alt="{{ v['name'] }}">
         {% else %}🥤{% endif %}
       </div>
       <div class="body">
