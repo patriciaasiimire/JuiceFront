@@ -31,7 +31,7 @@ load_dotenv()
 # ---------- Config ----------
 ALLOWED_EXT = {"png", "jpg", "jpeg", "webp", "gif"}
 MAX_UPLOAD_BYTES = 2 * 1024 * 1024  # 2 MB
-SERVICE_FEE = int(os.getenv("SERVICE_FEE", "300"))  # UGX
+SERVICE_FEE = int(os.getenv("SERVICE_FEE", "200"))  # UGX
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
@@ -147,17 +147,17 @@ def init_db():
     if cur.fetchone()["count"] == 0:
         seed = [
             ("Mama Sarah Juices", "Fresh tropical blends from Nansana market.", "0700000001",
-             [("Mango Passion", 3000), ("Pineapple Ginger", 2500), ("Watermelon Mint", 2000)]),
+             [("Mango Passion", 2000), ("Pineapple Ginger", 2500), ("Watermelon Mint", 2000)]),
             ("Green Leaf Naturals", "100% organic, no added sugar.", "0700000002",
              [("Avocado Smoothie", 4000), ("Beetroot Boost", 3500), ("Green Detox", 3500)]),
             ("Tropical Squeeze", "Cold-pressed daily.", "0700000003",
-             [("Orange Fresh", 2500), ("Passion Fruit", 3000), ("Guava Delight", 2500)]),
+             [("Orange Fresh", 2500), ("Passion Fruit", 2000), ("Guava Delight", 2500)]),
             ("Nansana Fresh Co.", "Local fruits, local prices.", "0700000004",
              [("Sugarcane Juice", 1500), ("Tamarind Cooler", 2000), ("Jackfruit Blend", 3500)]),
             ("Kampala Juice Bar", "Premium blends, delivered cold.", "0700000005",
              [("Berry Mix", 4500), ("Tropical Sunrise", 4000), ("Mango Lassi", 3500)]),
             ("Fruit Basket Uganda", "Family-run since 2015.", "0700000006",
-             [("Pineapple Passion", 3000), ("Watermelon Fresh", 2000), ("Mixed Fruit", 3500)]),
+             [("Pineapple Passion", 2000), ("Watermelon Fresh", 2000), ("Mixed Fruit", 3500)]),
         ]
         for name, desc, phone, juices in seed:
             cur.execute(
